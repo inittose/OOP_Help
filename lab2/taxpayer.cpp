@@ -17,3 +17,25 @@ Taxpayer::~Taxpayer()
 	delete _TIN;
 }
 
+void Taxpayer::UpdateTaxAmount()
+{
+	_totalIncomeTaxAmount = _taxableIncome * _incomeTaxPercentage / 100.0;
+}
+
+void Taxpayer::UpdateTotalIncomeAmount()
+{
+	_totalIncomeAmount = _taxableIncome + _nonTaxableIncome - _totalIncomeTaxAmount;
+}
+
+void Taxpayer::AddIncome(const int& income, const bool& taxability)
+{
+	if (taxability)
+	{
+		_taxableIncome += income;
+	}
+	else
+	{
+		_nonTaxableIncome += income;
+	}
+	UpdateTotalIncomeAmount();
+}
