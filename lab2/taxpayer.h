@@ -128,7 +128,7 @@ public:
 
 public:
     /// <summary>
-    /// Конструктор 
+    /// Конструктор
     /// </summary>
     Taxpayer(const char* tin, const int& year, const double &incomeTaxPercentage = 13.3);
     /// <summary>

@@ -2,55 +2,98 @@
 
 void MainMenu()
 {
-    char* menuMessage = "Choose one of the actions\n1 - Add income\nq - exit\n";
+    string menuMessage = "Choose one of the actions:\n1 - Add income\nq - exit\nYour choice: ";
     char* tin = InputTIN();
     int year;
-    cout << "Enter year: ";
+    InputField("Enter year: ", 4);
     year = ValidInput<int>();
     while (year <= 1999 || year > 2024)
     {
-        cout << "Enter correct year (2000 - 2024): ";
+        InputField("Enter correct year (2000 - 2024): ", 4);
         year = ValidInput<int>();
     }
-    Taxpayer* taxpayer = new Taxpayer(tin, year);
-    
+    Taxpayer* taxpayer = new Taxpayer(tin, 2000);
+    cout << endl;
+
+    char mode = '\0';
+    while (mode != 'q')
+    {
+        ClearTerminal();
+        ShowTaxpayerInfo(taxpayer);
+        cout << menuMessage;
+        mode = ValidInput<char>();
+        while (mode != '1' && mode != 'q')
+        {
+            cout << "Enter correct action: ";
+            mode = ValidInput<char>();
+        }
+        if (mode == '1')
+        {
+            cout << "Enter the number of income: ";
+            int income = ValidInput<int>();
+            cout << "Enter whether it is taxable (0 - No): ";
+            bool taxability = ValidInput<bool>();
+            taxpayer->AddIncome(income, taxability);
+        }
+    }
 
     delete taxpayer;
     delete tin;
 }
 
-void ShowTaxpayerInfo(const Taxpayer& taxpayer)
+void ShowTaxpayerInfo(const Taxpayer* taxpayer)
 {
-    cout << "TIN: " << taxpayer.GetTIN() << "";
+    cout << "TIN: " << taxpayer->GetTIN() << "\nYear: " << taxpayer->GetYear()
+         << "\nIncome tax percentage: " << taxpayer->GetIncomeTaxPercentage()
+         << "\nTaxable income: " << taxpayer->GetTaxableIncome()
+         << "\nNon taxable income: " << taxpayer->GetNonTaxableIncome()
+         << "\nTotal income tax amount: " << taxpayer->GetTotalIncomeTaxAmount()
+         << "\nTotal income amount: " << taxpayer->GetTotalIncomeAmount() << endl;
 }
 
 char* InputTIN()
 {
-    char* enterMessage = "\t   **********\rEnter TIN: ";
-    cout << enterMessage;
-    char* tin = new char(11);
-    tin[10] = '\0';
+    InputField("Enter TIN: ", 10);
+    char* tin = new char[11];
     int counter;
     char peek = cin.get();
-    for (counter = 0; counter < 10 && peek != '\n'; counter++)
+    for (counter = 0; counter < 10 && isdigit(peek); counter++)
     {
-        cout << peek << endl;
         tin[counter] = peek;
         peek = cin.get();
+    }
+    if (peek != '\n')
+    {
+        while (cin.get() != '\n');
     }
 
     while (counter < 9)
     {
-        cout << "\t\t\t\t\t    **********\rEnter correct TIN number (9 or 10 numbers): ";
+        InputField("Enter correct TIN number (9 or 10 numbers): ", 10);
         peek = cin.get();
-        for (counter = 0; counter < 10 && peek != '\n'; counter++)
+        for (counter = 0; counter < 10 && isdigit(peek); counter++)
         {
             tin[counter] = peek;
             peek = cin.get();
         }
+        if (peek != '\n')
+        {
+            while (cin.get() != '\n');
+        }
     }
+    tin[counter] = '\0';
 
     return tin;
+}
+
+void InputField(const string& inputMessage, const int& inputCharacters)
+{
+    cout << inputMessage;
+    for (int i = 0; i < inputCharacters; i++)
+    {
+        cout << "*";
+    }
+    cout << "\r" << inputMessage;
 }
 
 string GetTypeName(const char* letter)

@@ -6,7 +6,9 @@ using std::cout, std::cin, std::endl, std::string;
 
 void MainMenu();
 
-void ShowTaxpayerInfo(const Taxpayer& taxpayer);
+void ShowTaxpayerInfo(const Taxpayer* taxpayer);
+
+void InputField(const string& inputMessage, const int& inputCharacters);
 
 string GetTypeName(const char* letter);
 
