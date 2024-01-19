@@ -12,7 +12,7 @@ void MainMenu()
         InputField("Enter correct year (2000 - 2024): ", 4);
         year = ValidInput<int>();
     }
-    Taxpayer* taxpayer = new Taxpayer(tin, 2000);
+    Taxpayer* taxpayer = new Taxpayer(tin, year);
     cout << endl;
 
     char mode = '\0';
@@ -108,6 +108,8 @@ string GetTypeName(const char* letter)
         return "float";
     case 'd':
         return "double";
+    case 'b':
+        return "bool";
     case 'N':
         return "string";
     default:
