@@ -1,5 +1,7 @@
 #pragma once
 #include <cstring>
+#include <iostream>
+using std::istream;
 
 class Taxpayer
 {
@@ -53,7 +55,7 @@ public:
         _TIN = new char(strlen(tin));
         strcpy(_TIN, tin);
     }
-    
+
     /// <summary>
     /// Селектор для расчетного года
     /// </summary>
@@ -65,7 +67,7 @@ public:
     {
         _year = year;
     }
-    
+
     /// <summary>
     /// Селектор для налогооблагаемого дохода
     /// </summary>
@@ -77,7 +79,7 @@ public:
     {
         _taxableIncome = taxableIncome;
     }
-    
+
     /// <summary>
     /// Селектор для неналогооблагаемого дохода
     /// </summary>
@@ -89,7 +91,7 @@ public:
     {
         _nonTaxableIncome = nonTaxableIncome;
     }
-    
+
     /// <summary>
     /// Селектор для суммы подоходного налога
     /// </summary>
@@ -101,7 +103,7 @@ public:
     {
         _totalIncomeTaxAmount = totalIncomeTaxAmount;
     }
-    
+
     /// <summary>
     /// Селектор для суммы дохода
     /// </summary>
@@ -113,7 +115,7 @@ public:
     {
         _totalIncomeAmount = totalIncomeAmount;
     }
-    
+
     /// <summary>
     /// Селектор для процента подоходного налога
     /// </summary>
@@ -125,21 +127,31 @@ public:
     {
         _incomeTaxPercentage = incomeTaxPercentage;
     }
-    
+
 public:
     /// <summary>
     /// Конструктор
     /// </summary>
     Taxpayer(const char* tin, const int& year, const double &incomeTaxPercentage = 13.3);
     /// <summary>
+    /// Конструктор
+    /// </summary>
+    Taxpayer(const char* tin, const int& year, const double& taxableIncome, 
+        const double& nonTaxableIncome, const double& incomeTaxPercentage = 13.3);
+    /// <summary>
     /// Деструктор
     /// </summary>
     ~Taxpayer();
 
     /// <summary>
-    /// Добавить статью дохода налогооблагаемого
+    /// Добавить статью дохода
     /// </summary>
-    void AddIncome(const int& income, const bool& taxability);
+    void AddIncome(const double& income, const bool& taxability);
+
+    /// <summary>
+    /// Добавить налогооблагаемый доход после вычета налога
+    /// </summary>
+    void AddIncomeAfterTax(const double& incomeAfterTax);
 
 private:
     /// <summary>
@@ -150,4 +162,8 @@ private:
     /// Обновить сумму дохода
     /// </summary>
     void UpdateTotalIncomeAmount();
+
+public:
+    friend istream& operator>>(istream& os, Taxpayer& taxpayer);
+    friend void operator+=(double& sum, const Taxpayer& taxpayer);
 };
